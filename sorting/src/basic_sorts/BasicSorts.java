@@ -7,8 +7,8 @@ public class BasicSorts
     public static void main(String[] args)
     {
         int[] numbers = {42, 24, 41, 8, 11, 23, 8, 142, 420, 1237, 0};
-        numbers = generateRandomArray(1000, 1, 1000);
-        insertionSort(numbers);
+        numbers = generateRandomArray(1000000, 1, 1000000);
+        selectionSort(numbers);
 
         for (int number: numbers)
         {
@@ -94,13 +94,6 @@ public class BasicSorts
     private static void swap(int[] array, int first, int second)
     {
         int temp = array[first];
-        array[first] = array[second];
-        array[second] = temp;
-    }
-
-    private static void swap(Object[] array, int first, int second)
-    {
-        Object temp = array[first];
         array[first] = array[second];
         array[second] = temp;
     }
