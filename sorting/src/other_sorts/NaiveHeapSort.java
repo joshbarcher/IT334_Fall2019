@@ -1,4 +1,4 @@
-package basic_sorts;
+package other_sorts;
 
 import java.util.Arrays;
 import java.util.PriorityQueue;
