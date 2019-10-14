@@ -1,5 +1,7 @@
 package basic_sorts;
 
+import utilities.SortingUtilities;
+
 import java.util.Random;
 
 public class BasicSorts
@@ -7,7 +9,7 @@ public class BasicSorts
     public static void main(String[] args)
     {
         int[] numbers = {42, 24, 41, 8, 11, 23, 8, 142, 420, 1237, 0};
-        numbers = generateRandomArray(1000000, 1, 1000000);
+        numbers = SortingUtilities.generateRandomArray(1000000, 1, 1000000);
         selectionSort(numbers);
 
         for (int number: numbers)
@@ -17,7 +19,7 @@ public class BasicSorts
         System.out.println();
 
         //is it sorted?
-        System.out.println("Sorted? " + !detectAdjacentInversions(numbers));
+        System.out.println("Sorted? " + !SortingUtilities.detectAdjacentInversions(numbers));
     }
 
     public static void bubbleSort(int[] array)
@@ -34,7 +36,7 @@ public class BasicSorts
             {
                 if (array[j] > array[j + 1])
                 {
-                    swap(array, j, j + 1);
+                    SortingUtilities.swap(array, j, j + 1);
                 }
             }
         }
@@ -52,7 +54,7 @@ public class BasicSorts
             {
                 if (array[j] < array[j - 1])
                 {
-                    swap(array, j, j - 1);
+                    SortingUtilities.swap(array, j, j - 1);
                 }
                 else
                 {
@@ -87,40 +89,7 @@ public class BasicSorts
             }
 
             // swap whatever is in index i with the next smallest element
-            swap(array, i, smallestIndex);
+            SortingUtilities.swap(array, i, smallestIndex);
         }
-    }
-
-    private static void swap(int[] array, int first, int second)
-    {
-        int temp = array[first];
-        array[first] = array[second];
-        array[second] = temp;
-    }
-
-    private static boolean detectAdjacentInversions(int[] array)
-    {
-        for (int i = 0; i < array.length - 1; i++)
-        {
-            if (array[i] > array[i + 1])
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static int[] generateRandomArray(int size, int low, int high)
-    {
-        Random random = new Random();
-        int[] array = new int[size];
-
-        for (int i = 0; i < array.length; i++)
-        {
-            array[i] = low + random.nextInt(high - low + 1);
-        }
-
-        return array;
     }
 }
