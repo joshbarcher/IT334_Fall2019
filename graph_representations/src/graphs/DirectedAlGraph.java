@@ -1,13 +1,11 @@
 package graphs;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DirectedAlGraph<V> implements IGraph<V>
 {
     private Map<V, Node> aLists;
+    private int edgeSize = 0;
 
     public DirectedAlGraph()
     {
@@ -39,6 +37,25 @@ public class DirectedAlGraph<V> implements IGraph<V>
     @Override
     public void addEdge(Edge<V> edge)
     {
+        checkValidEdge(edge);
+
+        edgeSize++;
+
+        //otherwise add the edge
+        if (aLists.get(edge.getSource()) == null)
+        {
+            aLists.put(edge.getSource(), new Node(edge.getDest()));
+        }
+        else
+        {
+            Node oldHead = aLists.get(edge.getSource());
+            Node newHead = new Node(edge.getDest(), oldHead);
+            aLists.put(edge.getSource(), newHead);
+        }
+    }
+
+    private void checkValidEdge(Edge<V> edge)
+    {
         //prevent self loops
         if (edge.getSource().equals(edge.getDest()))
         {
@@ -61,18 +78,6 @@ public class DirectedAlGraph<V> implements IGraph<V>
         if (containsEdge(edge))
         {
             throw new IllegalArgumentException("Edge " + edge + " already exists");
-        }
-
-        //otherwise add the edge
-        if (aLists.get(edge.getSource()) == null)
-        {
-            aLists.put(edge.getSource(), new Node(edge.getDest()));
-        }
-        else
-        {
-            Node oldHead = aLists.get(edge.getSource());
-            Node newHead = new Node(edge.getDest(), oldHead);
-            aLists.put(edge.getSource(), newHead);
         }
     }
 
@@ -100,19 +105,38 @@ public class DirectedAlGraph<V> implements IGraph<V>
     @Override
     public void clear()
     {
-
+        //clear out adjacency lists
+        aLists.clear();
+        edgeSize = 0;
     }
 
     @Override
     public Set<V> vertices()
     {
-        return null;
+        //create a new set to try and prevent
+        //concurrent modification exceptions
+        //in for loops outside this class
+        return new HashSet<>(aLists.keySet());
     }
 
     @Override
     public Set<Edge<V>> edges()
     {
-        return null;
+        Set<Edge<V>> results = new HashSet<>();
+
+        //loop over all adjacency lists
+        for (V vertex : aLists.keySet())
+        {
+            Node node = aLists.get(vertex);
+            while (node != null)
+            {
+                Edge<V> edge = new Edge<>(vertex, node.destVertex);
+                results.add(edge);
+                node = node.next;
+            }
+        }
+
+        return results;
     }
 
     @Override
@@ -159,7 +183,7 @@ public class DirectedAlGraph<V> implements IGraph<V>
     @Override
     public int edgeSize()
     {
-        return 0;
+        return edgeSize;
     }
 
     private class Node
