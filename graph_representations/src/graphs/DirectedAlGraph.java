@@ -102,6 +102,63 @@ public class DirectedAlGraph<V> implements IGraph<V>
 
     }
 
+    public Map<V, V> dijkstras(V source)
+    {
+        //double check my input
+        if (!containsVertex(source))
+        {
+            throw new IllegalArgumentException("Source vertex does not exist in graph - " + source);
+        }
+
+        //create helper structures
+        Map<V, V> spanningTree = new HashMap<>();
+        Map<V, Double> labels = new HashMap<>();
+        PriorityQueue<WeightedPair<V>> pairs = new PriorityQueue<>();
+
+        //set up initial labels
+        labels.put(source, 0.0);
+        pairs.add(new WeightedPair<>(source, 0.0));
+        spanningTree.put(source, null);
+
+        for (V vertex : aLists.keySet())
+        {
+            if (!vertex.equals(source))
+            {
+                labels.put(vertex, Double.POSITIVE_INFINITY);
+                pairs.add(new WeightedPair<>(vertex, Double.POSITIVE_INFINITY));
+            }
+        }
+
+        //perform dijstra's routine
+        while (!pairs.isEmpty())
+        {
+            //pull out a pair
+            WeightedPair<V> pair = pairs.remove();
+            V vertex = pair.getVertex();
+            double label = pair.getLabel();
+
+            //update adjacent vertices and finalize the current label
+            Node adjacent = aLists.get(vertex);
+            while (adjacent != null)
+            {
+                //ask whether I should update the adjacent vertex
+                double candidate = adjacent.weight + label;
+                double adjacentVertexWeight = labels.get(adjacent.destVertex);
+
+                if (candidate < adjacentVertexWeight)
+                {
+                    //update the value in the map and heap
+                    labels.put(adjacent.destVertex, candidate);
+                    pairs.remove(new WeightedPair<>(adjacent.destVertex, 0.0));
+                    pairs.add(new WeightedPair<>(adjacent.destVertex, candidate));
+                }
+            }
+        }
+
+
+        return null;
+    }
+
     @Override
     public void clear()
     {
@@ -190,10 +247,17 @@ public class DirectedAlGraph<V> implements IGraph<V>
     {
         private V destVertex;
         private Node next;
+        private double weight;
 
         public Node(V vertex)
         {
             this(vertex, null);
+        }
+
+        public Node(V vertex, double weight)
+        {
+            this.destVertex = vertex;
+            this.weight = weight;
         }
 
         public Node(V destVertex, Node next)

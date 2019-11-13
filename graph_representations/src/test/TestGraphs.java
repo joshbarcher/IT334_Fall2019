@@ -34,8 +34,15 @@ public class TestGraphs
         boolean hasAF = letterGraph.containsEdge(new Edge<>('a', 'f')); //should be false
 
         //all of the following should throw an exception
-        letterGraph.addEdge(new Edge<>('a', 'a')); //self-loop
-        letterGraph.addEdge(new Edge<>('f', 'g')); //missing vertex
-        letterGraph.addEdge(new Edge<>('a', 'c')); //duplicate edge
+//        letterGraph.addEdge(new Edge<>('a', 'a')); //self-loop
+//        letterGraph.addEdge(new Edge<>('f', 'g')); //missing vertex
+//        letterGraph.addEdge(new Edge<>('a', 'c')); //duplicate edge
+
+        double inf = Double.POSITIVE_INFINITY;
+
+        if (inf == Double.POSITIVE_INFINITY)
+        {
+            System.out.println("inf == inf");
+        }
     }
 }
