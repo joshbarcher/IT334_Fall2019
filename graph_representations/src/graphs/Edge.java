@@ -4,11 +4,18 @@ public class Edge<V>
 {
     private V source;
     private V dest;
+    private double weight;
 
-    public Edge(V source, V dest)
+    public Edge(V source, V dest, double weight)
     {
         this.source = source;
         this.dest = dest;
+        this.weight = weight;
+    }
+
+    public Edge(V source, V dest)
+    {
+        this(source, dest, 1.0);
     }
 
     public V getSource()
@@ -29,6 +36,16 @@ public class Edge<V>
     public void setDest(V dest)
     {
         this.dest = dest;
+    }
+
+    public double getWeight()
+    {
+        return weight;
+    }
+
+    public void setWeight(double weight)
+    {
+        this.weight = weight;
     }
 
     @Override

@@ -44,12 +44,12 @@ public class DirectedAlGraph<V> implements IGraph<V>
         //otherwise add the edge
         if (aLists.get(edge.getSource()) == null)
         {
-            aLists.put(edge.getSource(), new Node(edge.getDest()));
+            aLists.put(edge.getSource(), new Node(edge.getDest(), edge.getWeight()));
         }
         else
         {
             Node oldHead = aLists.get(edge.getSource());
-            Node newHead = new Node(edge.getDest(), oldHead);
+            Node newHead = new Node(edge.getDest(), oldHead, edge.getWeight());
             aLists.put(edge.getSource(), newHead);
         }
     }
@@ -151,12 +151,14 @@ public class DirectedAlGraph<V> implements IGraph<V>
                     labels.put(adjacent.destVertex, candidate);
                     pairs.remove(new WeightedPair<>(adjacent.destVertex, 0.0));
                     pairs.add(new WeightedPair<>(adjacent.destVertex, candidate));
+
+                    spanningTree.put(adjacent.destVertex, vertex);
                 }
+                adjacent = adjacent.next;
             }
         }
 
-
-        return null;
+        return spanningTree;
     }
 
     @Override
@@ -264,6 +266,13 @@ public class DirectedAlGraph<V> implements IGraph<V>
         {
             this.destVertex = destVertex;
             this.next = next;
+        }
+
+        public Node(V destVertex, Node next, double weight)
+        {
+            this.destVertex = destVertex;
+            this.next = next;
+            this.weight = weight;
         }
     }
 }
